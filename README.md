@@ -1,2 +1,2 @@
-# Generate pixel arts 🎨
+# Generate and post pixel arts 🎨
 
