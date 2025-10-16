@@ -1,0 +1,18 @@
+schemas:
+  Error:
+    type: object
+    required:
+      - code
+      - meaasge
+    properties:
+      meaasge:
+        type: string
+      code:
+        type: number
+
+NotFoundError:
+  description: Not found
+  content:
+    application/json:
+      schema:
+        $ref: '#/schemas/Error'

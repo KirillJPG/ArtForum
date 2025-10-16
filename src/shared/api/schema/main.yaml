@@ -1,0 +1,15 @@
+openapi: 3.0.0
+info:
+  title: Main Registration API
+  version: 1.0.0
+  description: Main api schema
+  
+paths:
+  /art:
+    get: 
+      $ref: ./endpoints/Art.yaml#/getAllArts
+    post:
+      $ref: ./endpoints/Art.yaml#/createArt
+  /art/{id}:
+    delete:
+      $ref: ./endpoints/Art.yaml#/deleteArt

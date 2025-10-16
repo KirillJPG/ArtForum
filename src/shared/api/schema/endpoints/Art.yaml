@@ -1,0 +1,173 @@
+schemas:
+  Art:
+    type: object
+    required:
+      - id
+      - name
+      - image
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      image:
+        type: string
+
+  CreateArt:
+    type: object
+    required:
+      - name
+      - image
+    properties:
+      name:
+        type: string
+      image:
+        type: string
+
+
+  ArtResponse:
+    type: object
+    required:
+      - id
+      - name
+      - imageUrl
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      imageUrl:
+        type: string
+
+
+getAllArts:
+  summary: Get all arts
+  responses:
+    '200':
+      description: List of arts
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/schemas/ArtResponse'
+    '404':
+      $ref: '../shared/responses.yaml#/NotFoundError'
+
+createArt:
+  summary: Create art
+  requestBody:
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          $ref: "#/schemas/CreateArt"
+  responses:
+    '201':
+      description: Successfully created art
+      content:
+        application/json:
+          schema:
+            $ref: "#/schemas/ArtResponse"
+    '400':
+      description: Invalid input or file format
+    '413':
+      description: File too large
+
+getArt:
+  summary: Get art by ID
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    '200':
+      description: Art details
+      content:
+        application/json:
+          schema:
+            $ref: "#/schemas/ArtResponse"
+    '404':
+      $ref: '../shared/responses.yaml#/NotFoundError'
+
+updateArt:
+  summary: Update art
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  requestBody:
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+              minLength: 1
+              maxLength: 255
+            image:
+              type: string
+              format: binary
+            description:
+              type: string
+              maxLength: 1000
+  responses:
+    '200':
+      description: Art updated successfully
+      content:
+        application/json:
+          schema:
+            $ref: "#/schemas/ArtResponse"
+    '404':
+      $ref: '../shared/responses.yaml#/NotFoundError'
+
+deleteArt:
+  summary: Delete an Art
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    '204':
+      description: Art deleted successfully
+    '404':
+      $ref: '../shared/responses.yaml#/NotFoundError'
+
+downloadArtImage:
+  summary: Download art image
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    '200':
+      description: Image file
+      content:
+        image/png:
+          schema:
+            type: string
+            format: binary
+        image/jpeg:
+          schema:
+            type: string
+            format: binary
+        image/gif:
+          schema:
+            type: string
+            format: binary
+    '404':
+      $ref: '../shared/responses.yaml#/NotFoundError'
