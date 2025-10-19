@@ -7,7 +7,8 @@ export const ROUTES = {
   REGISTER: "/register",
   ARTS: "/arts",
   ART: "/arts/:artId",
-  ANY:"*"
+  ANY:"*",
+  USER:"/profile/:userId"
 
 } as const;
 
@@ -15,12 +16,10 @@ export interface PathParams {
   [ROUTES.ART]: {
     artId: number;
   };
+  [ROUTES.USER]: {
+    userId: number;
+  };
 };
-
-export function generateTypedPath(
-  path: string,
-):string
-
 
 
 export function generateTypedPath<Path extends keyof PathParams>(

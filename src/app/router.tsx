@@ -10,6 +10,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, Component:lazy(()=>import("@features/home/index") )},
       { path: ROUTES.ARTS, Component:lazy(()=>import("@features/art-list/index"))},
+      { path: ROUTES.USER, element:<>user</>},
       { path: ROUTES.ANY, loader:()=>redirect(ROUTES.HOME)},
 
     ],
