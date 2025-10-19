@@ -1,9 +1,10 @@
+import { LineForm } from "@/shared/ui/LineForm/LineForm";
 
-export default function Home(){
-    
+export default function Home(){    
     return(
-        <div className="">
-
+        <div className="p-10">
+            <LineForm placeholder="Label"/>
         </div>
     )
 }
+
