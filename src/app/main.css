@@ -22,12 +22,12 @@
     --color-primary60:#E56D67;
     --color-primary80:#C42A22;
     --color-primary100:#98211A;
-    --color-black30:#1B1B1B30;
-    --color-black60:#1B1B1B60;
-    --color-black90:#1B1B1B90;
-    --color-white30:#F9F9F930;
-    --color-white60:#F9F9F960;
-    --color-white90:#F9F9F990;
+    --color-black30:#1B1B1B60;
+    --color-black60:#1B1B1B80;
+    --color-black90:#1B1B1B95;
+    --color-white30:#F9F9F955;
+    --color-white60:#F9F9F990;
+    --color-white90:#F9F9F9;
     --color-error:#FE416D;
     --color-warning:#A04AE3;
     --color-success:#00DDC0;

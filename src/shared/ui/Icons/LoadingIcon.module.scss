@@ -1,0 +1,39 @@
+.spin{
+    animation: rotate 1s infinite linear both;
+    & circle{
+        stroke: var(--color-primary);
+        stroke-width: 6px;
+        stroke-linecap: round;
+        r:12px;
+        cx:16px;
+        cy:16px;
+        animation: load 1s infinite ease-in-out both;
+        // stroke-dasharray: 1,150;
+        // stroke-dashoffset: 0;
+    }    
+}
+
+@keyframes load {
+    
+    0%{
+        stroke-dasharray: 0,75;
+        stroke-dashoffset: 0;
+    }
+    50%{
+        stroke-dasharray: 50,75;
+        stroke-dashoffset: -35;
+    }
+    100%{
+        stroke-dasharray: 70,75;
+        stroke-dashoffset: -70;
+    }
+}
+@keyframes rotate {
+    0%{
+        rotate: 0deg;
+    }
+
+    100%{
+        rotate: 360deg;
+    }
+}
