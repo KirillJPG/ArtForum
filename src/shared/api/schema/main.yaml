@@ -13,3 +13,6 @@ paths:
   /art/{id}:
     delete:
       $ref: ./endpoints/Art.yaml#/deleteArt
+  /art/{name}:
+    get:
+        $ref: ./endpoints/Art.yaml#/getArtsByName

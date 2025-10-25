@@ -5,10 +5,12 @@ import { Search } from "@/shared/ui/Search/Search";
 import { rqClient } from "@/shared/api/instance";
 import { LoadingIcon } from "@/shared/ui/Icons/LoadingIcon";
 import { SearchIcon } from "@/shared/ui/Icons/SearchIcon";
-import { Livenstein } from "@/shared/lib/Livenstein";
+import { useState } from "react";
+import { Modal } from "@/shared/ui/Modal/Modal";
+import type { ApiSchemas } from "@/shared/api";
+import { useDebounce } from "@/shared/lib/useDebounce";
 
 export default function Header(){
-    Livenstein("gamfdbcbcvxbsdrebcvdnvcbvnrt3554xbsdrebcvxbsdrevxbsdre","g3mfdbcvxbsdrefgjldjfglksdjflgksdlkfrrer")
     return (
         <div className="py-2 shadow-md shadow-gray-100 ">
             <Container>
@@ -27,7 +29,31 @@ export default function Header(){
 }
 
 function SearchHeader(){
-    const {isLoading} = rqClient.useQuery("get","/art")
-    const icon = (isLoading ) ? <LoadingIcon/> : <SearchIcon/>
-    return <Search className="w-full" placeholder="Search of arts" icon={icon}/>
+    const [focus,setFocus] = useState(false)
+    const {state:search,setDebounceState:setSearch} = useDebounce("",1000)
+    const {isLoading,data} = rqClient.useQuery("get","/art/{name}",{params:{path:{name:search}}})
+    return (
+        <div className="relative">
+            <Search onChange={e=>setSearch(e.target.value+"")} className="border-transparent border w-full has-focus:border-black90 duration-500" onBlur={()=>setFocus(false)} onFocus={()=>setFocus(true)}  placeholder="Search of arts" icon={isLoading ? <LoadingIcon/> : <SearchIcon/>}/>
+            {(focus) && <Modal><ListItems arts={data} isLoading={isLoading}/></Modal>}
+
+        </div>
+    )
+}
+
+interface IModalSearch{
+    arts?:ApiSchemas["ArtResponse"][]
+    isLoading:boolean
+}
+
+function ListItems({arts,isLoading}:IModalSearch){
+    if (isLoading) return <div className="text-black90 text-lg">Loading</div>
+    if (!arts) return <div className="text-black90 text-lg w-full align-middle">Not Found</div>
+    return (
+        <div className="grid gap-4">
+            {arts.map(e=>(
+                <div className="" key={e.id}>{e.name}</div>
+            ))}
+        </div>
+    )
 }
