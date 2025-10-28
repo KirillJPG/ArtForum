@@ -5,38 +5,36 @@ import { getDisntance } from "@/shared/lib/getDistance";
 
 
 const arts: ApiSchemas["ArtResponse"][] = [
+
   {
     id: crypto.randomUUID(),
-    name: "Dota 2",
+    name: "artkiwejorewjorjioujriowjrwojorwioreio2art2artowekrowekrowkroworwekorwkowokoworoe",
     imageUrl:"/public/arts/amogus.jpg"
   },
-   {
+  {
     id: crypto.randomUUID(),
-    name: "Dota jwjiorwjeorjiowjrekowrkwjrklwndslkfndsldfnkjgdhkhsklfgklsdhgjklsdhgjklsdkl",
+    name: "Art 4",
     imageUrl:"/public/arts/amogus.jpg"
   },
-   {
-    id: crypto.randomUUID(),
-    name: "Dota opjrtopjqweoprjpqowerjiopwqjeorpwqjropwjropjqwoperopqwieopirjopqwrjop",
-    imageUrl:"/public/arts/amogus.jpg"
-  },
+
 ];
 
 export const handlers = [
   http.get("/art", 
     () => {
       return new Promise(res=>{
-        setTimeout(res,1000)
+        setTimeout(res,500)
       }).then(()=>{
         return HttpResponse.json(arts)
       })
     }
   ),
   http.get("/art/{name}", async(ctx) => {
-      console.log(ctx.params.name)
-      const filtered = arts.filter(e=>getDisntance(e.name,ctx.params.name) < 95)
+      const name = ctx.params.name.toLowerCase()
+      
+      const filtered = arts.filter(e=>getDisntance(e.name.toLowerCase(),name) < 50 || e.name.toLowerCase().includes(name)).splice(0,10)
       return new Promise(res=>{
-        setTimeout(res,1000)
+        setTimeout(res,1)
       }).then(()=>{
         return HttpResponse.json(filtered)
       })

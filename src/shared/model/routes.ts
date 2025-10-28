@@ -14,10 +14,10 @@ export const ROUTES = {
 
 export interface PathParams {
   [ROUTES.ART]: {
-    artId: number;
+    artId: string;
   };
   [ROUTES.USER]: {
-    userId: number;
+    userId: string;
   };
 };
 

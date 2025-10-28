@@ -3,6 +3,6 @@ import style from "./LoadingIcon.module.scss"
 
 export function LoadingIcon(){
     return (
-        <Loading  width={32} height={32} className={style.spin}/>
+        <Loading  width={20} height={20} className={style.spin}/>
     )
 }

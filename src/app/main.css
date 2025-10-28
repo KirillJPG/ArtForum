@@ -32,3 +32,6 @@
     --color-warning:#A04AE3;
     --color-success:#00DDC0;
 }
+*{
+    outline: none;
+}

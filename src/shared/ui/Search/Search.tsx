@@ -8,8 +8,8 @@ interface ISearch extends InputHTMLAttributes<HTMLInputElement> {
 
 export function Search({icon,ref,className,...props}:ISearch){
     return (
-        <label className={clsx("rounded-sm focus:border bg-white90 py-2 px-3 placeholder:text-black60 relative grid grid-flow-col auto-cols-max justify-between   items-center",className)}>
-            <input {...props} ref={ref}/>
+        <label className={clsx("rounded-sm focus:border bg-white90 py-2 relative px-3 placeholder:text-black60 grid grid-flow-col justify-between items-center",className)}>
+            <input className="w-full" {...props} ref={ref}/>
             {icon}
         </label>
     )
