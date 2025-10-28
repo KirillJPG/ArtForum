@@ -1,4 +1,4 @@
-import { HttpResponse } from "msw";
+import { delay, HttpResponse } from "msw";
 import { http } from "../http";
 import type { ApiSchemas } from "../..";
 import { getDisntance } from "@/shared/lib/getDistance";
@@ -21,23 +21,19 @@ const arts: ApiSchemas["ArtResponse"][] = [
 
 export const handlers = [
   http.get("/art", 
-    () => {
-      return new Promise(res=>{
-        setTimeout(res,500)
-      }).then(()=>{
-        return HttpResponse.json(arts)
-      })
+    async() => {
+      await delay(100)
+      return HttpResponse.json(arts)
     }
   ),
   http.get("/art/{name}", async(ctx) => {
       const name = ctx.params.name.toLowerCase()
       
       const filtered = arts.filter(e=>getDisntance(e.name.toLowerCase(),name) < 50 || e.name.toLowerCase().includes(name)).splice(0,10)
-      return new Promise(res=>{
-        setTimeout(res,1)
-      }).then(()=>{
-        return HttpResponse.json(filtered)
-      })
+      await delay(100)
+
+      return HttpResponse.json(filtered)
+      
     }
   ),
   http.post("/art",async (ctx)=>{

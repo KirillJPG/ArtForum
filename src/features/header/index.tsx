@@ -34,6 +34,7 @@ function SearchHeader(){
     const [focus,setFocus] = useState(false)
     const {state:search,setDebounceState:setSearch} = useDebounce("",10)
     const {isLoading,data} = rqClient.useQuery("get","/art/{name}",{params:{path:{name:search}}})
+    console.log(isLoading)
     return (
         <>
             {(focus) && <div className="fixed duration-500 starting:opacity-0 left-0 top-0 right-0 bottom-0 bg-black90 backdrop-blur-[2px]" onClick={()=>setFocus(false)}></div> }
