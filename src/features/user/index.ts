@@ -1,3 +1,3 @@
-import {Avatar as AvatarComp}  from "./Avatar.tsx"
+import AvatarComp from "./Avatar.tsx"
 
 export const Avatar = AvatarComp

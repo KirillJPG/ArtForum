@@ -1,6 +1,3 @@
-import { Container } from "@/shared/ui/Container/Container";
-import { Logo } from "@/shared/ui/Logo/Logo";
-import { Avatar } from "../user";
 import { Search } from "@/shared/ui/Search/Search";
 import { rqClient } from "@/shared/api/instance";
 import { LoadingIcon } from "@/shared/ui/Icons/LoadingIcon";
@@ -11,34 +8,23 @@ import type { ApiSchemas } from "@/shared/api";
 import { useDebounce } from "@/shared/lib/useDebounce";
 import { Link } from "react-router";
 import { generateTypedPath, ROUTES } from "@/shared/model/routes";
+import { useStoreHeader } from "./headerStore";
 
-export default function Header(){
-    return (
-        <div className="py-2 shadow-md shadow-gray-100 max-w-full">
-            <Container>
-                <div className="grid grid-flow-col items-center">
-                    <Logo/>
-                    <div className="">
-                        <SearchHeader/>
-                    </div>
-                    <div className="grid justify-end">
-                        <Avatar/>
-                    </div>
-                </div>
-            </Container>
-        </div>
-    )
-}
-
-function SearchHeader(){
+export function SearchHeader(){
     const [focus,setFocus] = useState(false)
+    const {variant} = useStoreHeader()
     const {state:search,setDebounceState:setSearch} = useDebounce("",10)
     const {isLoading,data} = rqClient.useQuery("get","/art/{name}",{params:{path:{name:search}}})
-    console.log(isLoading)
+    const isLight = variant == "light"
     return (
         <>
             {(focus) && <div className="fixed duration-500 starting:opacity-0 left-0 top-0 right-0 bottom-0 bg-black90 backdrop-blur-[2px]" onClick={()=>setFocus(false)}></div> }
-            <Search onChange={e=>setSearch(e.target.value)} className="border-transparent border w-full has-focus:border-black90 duration-500"  onFocus={()=>setFocus(true)}  placeholder="Search of arts" icon={isLoading ? <LoadingIcon/> : <SearchIcon/>}/>
+            <Search onChange={e=>setSearch(e.target.value)} 
+                    onFocus={()=>setFocus(true)}  
+                    placeholder="Search of arts" 
+                    variant={variant}  
+                    icon={isLoading ? <LoadingIcon /> : <SearchIcon className={isLight ? "fill-white" : "fill-black"}/>}/>
+
             {(focus) && <div className="relative z-20">
                 <Modal><ListItems search={search} arts={data} isLoading={isLoading}/></Modal>
             </div>}

@@ -1,8 +1,13 @@
+import { ArtList } from "../ArtList";
+import { Hero } from "../hero";
 
 export default function Home(){    
+    
     return(
-        <div className="p-10">
-        </div>
+        <>
+        <Hero/>
+        <ArtList/>
+        </>
     )
 }
 

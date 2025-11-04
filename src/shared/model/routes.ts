@@ -8,7 +8,8 @@ export const ROUTES = {
   ARTS: "/arts",
   ART: "/arts/:artId",
   ANY:"*",
-  USER:"/profile/:userId"
+  USER:"/profile/:userId",
+  CREATE:"/art/create"
 
 } as const;
 

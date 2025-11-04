@@ -9,7 +9,8 @@ const arts: ApiSchemas["ArtResponse"][] = [
   {
     id: crypto.randomUUID(),
     name: "artkiwejorewjorjioujriowjrwojorwioreio2art2artowekrowekrowkroworwekorwkowokoworoe",
-    imageUrl:"/public/arts/amogus.jpg"
+    imageUrl:"/public/arts/amogus.jpg",
+   
   },
   {
     id: crypto.randomUUID(),
