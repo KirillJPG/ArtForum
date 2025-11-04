@@ -3,6 +3,19 @@ import { http } from "../http";
 import type { ApiSchemas } from "../..";
 import { getDisntance } from "@/shared/lib/getDistance";
 
+const users: ApiSchemas["User"][]=[
+  {
+    avatar:"/public/image/avatar.webp",
+    createAt:new Date().getTime().toString(),
+    name:"Vladix"
+  },
+  {
+    avatar:"/public/image/avatar.webp",
+    createAt:new Date().getTime().toString(),
+    name:"SlaveX"
+  },
+]
+
 
 const arts: ApiSchemas["ArtResponse"][] = [
 
@@ -10,12 +23,25 @@ const arts: ApiSchemas["ArtResponse"][] = [
     id: crypto.randomUUID(),
     name: "artkiwejorewjorjioujriowjrwojorwioreio2art2artowekrowekrowkroworwekorwkowokoworoe",
     imageUrl:"/public/arts/amogus.jpg",
-   
+    author:users[0],
+    categories:["characters","fantasy"],
+    createAt:new Date().getTime().toString()
   },
   {
     id: crypto.randomUUID(),
-    name: "Art 4",
-    imageUrl:"/public/arts/amogus.jpg"
+    name: "SDSDSDASAS",
+    imageUrl:"/public/arts/amogus.jpg",
+    author:users[1],
+    categories:["buildings","abstract","tilesets"],
+    createAt:new Date().getTime().toString()
+  },
+  {
+    id: crypto.randomUUID(),
+    name: "CVCVCVCk",
+    imageUrl:"/public/arts/amogus.jpg",
+    author:users[0],
+    categories:["characters","animals"],
+    createAt:new Date().getTime().toString()
   },
 
 ];
@@ -46,7 +72,10 @@ export const handlers = [
     const newArt:ApiSchemas["ArtResponse"] = {
         name,
         imageUrl:"",
-        id:crypto.randomUUID()
+        id:crypto.randomUUID(),
+        author:users[0],
+        categories:["buildings"],
+        createAt:new Date().getTime().toString()
     }
     arts.push(newArt)
     return HttpResponse.json(newArt)

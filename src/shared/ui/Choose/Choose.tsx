@@ -1,6 +1,6 @@
 import { cva } from "class-variance-authority";
 import clsx from "clsx";
-import type { OptionHTMLAttributes } from "react";
+import { memo, type OptionHTMLAttributes } from "react";
 
 type Size = "large" | "small"
 type Select = "select" | "no_select"
@@ -10,7 +10,7 @@ interface IChoose extends OptionHTMLAttributes<HTMLOptionElement>{
     select:Select
 }
 
-const optionStyle = cva("bg-transparent border disabled:brightness-[0.25]",{
+const optionStyle = cva("bg-transparent border duration-500 rounded-md disabled:brightness-[0.25] select-none",{
     variants:{
         variant:{
             select:"border-primary text-primary",
@@ -23,8 +23,9 @@ const optionStyle = cva("bg-transparent border disabled:brightness-[0.25]",{
     }
 })
 
-export function Choose({className,select,size,...props}:IChoose){
+function Choose({className,select,size,...props}:IChoose){
     return (
         <option className={clsx(optionStyle({size,variant:select}),className)} {...props}/>
     )
 }
+export default memo(Choose)

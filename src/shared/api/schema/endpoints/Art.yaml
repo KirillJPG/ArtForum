@@ -1,37 +1,55 @@
 schemas:
-  Art:
-    type: object
-    required:
-      - id
-      - name
-      - image
-    properties:
-      id:
-        type: string
-      name:
-        type: string
-      image:
-        type: string
-
   CreateArt:
     type: object
     required:
       - name
       - image
+      - categories
     properties:
       name:
         type: string
       image:
         type: string
-
-
+      categories:
+        type: array 
+        items: 
+          type: string
+  User:
+    type: object
+    required:
+      - name
+      - avatar
+      - createAt
+    properties:
+      name:
+        type: string
+      createAt:
+        type: string
+        format: date
+      avatar:
+        type: string
   ArtResponse:
     type: object
     required:
       - id
       - name
       - imageUrl
+      - author
+      - createAt
+      - categories
+      - likes
     properties:
+      categories:
+        type: array 
+        items: 
+          type: string
+      createAt:
+        type: string
+        format: date
+      likes:
+        type: number
+      author:
+        $ref: "#/schemas/User"
       id:
         type: string
       name:

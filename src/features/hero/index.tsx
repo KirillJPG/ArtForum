@@ -20,7 +20,7 @@ export function Hero(){
                     <div className="">
                         <div className="text-white text-5xl pb-4">This Website is a Digital Canvas</div>
                         <div className="text-white60 text-2xl pb-4">Paint your digital masterpiece. One pixel, one block, one idea at a time.</div>
-                        <Link to={ROUTES["CREATE"]}><Button variant={{size:"large",variant:"primary"}}>Create</Button></Link>
+                        <Link to={ROUTES["CREATE"]}><Button variant="primary" size={"large"}>Create</Button></Link>
                     </div>
                     <div className="grid justify-items-center">
                         <img src="/public/arts/black-hole.png" className={clsx(styles.art,"w-full")}/>

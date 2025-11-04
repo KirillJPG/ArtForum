@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes } from "react";
+import { memo, type ButtonHTMLAttributes } from "react";
 import {cva,type VariantProps} from "class-variance-authority"
 
 export type ButtonProps = VariantProps<typeof buttonVariance>;
@@ -9,7 +9,7 @@ const buttonVariance = cva("font-bold duration-500 hover:cursor-pointer disabled
     },
     variants:{
         variant:{
-            primary:"bg-primary text-white hover:bg-primary80",
+            primary:"bg-primary text-white hover:bg-primary80 border border-transparent",
             secondary:" bg-transparent text-black60 border border-black60 "
         },
         size:{
@@ -19,13 +19,10 @@ const buttonVariance = cva("font-bold duration-500 hover:cursor-pointer disabled
         }
     }
 })
-interface UI_Button extends ButtonHTMLAttributes<HTMLButtonElement>{
-    variant:ButtonProps
-}
+type UI_Button = ButtonHTMLAttributes<HTMLButtonElement> & ButtonProps
 
-export function Button({variant,...props}:UI_Button){
+export const Button =memo(function Button({variant,size,...props}:UI_Button){
     return (
-
-        <button {...props} className={buttonVariance(variant)}/>
+        <button {...props} className={buttonVariance({variant,size})}/>
     )
-}
+})

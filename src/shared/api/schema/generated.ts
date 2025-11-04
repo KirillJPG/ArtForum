@@ -159,7 +159,17 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        User: {
+            name: string;
+            /** Format: date */
+            createAt: string;
+            avatar: string;
+        };
         ArtResponse: {
+            categories: string[];
+            /** Format: date */
+            createAt: string;
+            author: components["schemas"]["User"];
             id: string;
             name: string;
             imageUrl: string;
