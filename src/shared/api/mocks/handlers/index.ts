@@ -5,13 +5,15 @@ import { getDisntance } from "@/shared/lib/getDistance";
 
 const users: ApiSchemas["User"][]=[
   {
+    id: crypto.randomUUID(),
     avatar:"/public/image/avatar.webp",
-    createAt:new Date().getTime().toString(),
+    createAt:new Date().getTime(),
     name:"Vladix"
   },
   {
+    id: crypto.randomUUID(),
     avatar:"/public/image/avatar.webp",
-    createAt:new Date().getTime().toString(),
+    createAt:new Date().getTime(),
     name:"SlaveX"
   },
 ]
@@ -25,7 +27,8 @@ const arts: ApiSchemas["ArtResponse"][] = [
     imageUrl:"/public/arts/amogus.jpg",
     author:users[0],
     categories:["characters","fantasy"],
-    createAt:new Date().getTime().toString()
+    createAt:new Date().getTime(),
+    likes:0
   },
   {
     id: crypto.randomUUID(),
@@ -33,7 +36,8 @@ const arts: ApiSchemas["ArtResponse"][] = [
     imageUrl:"/public/arts/amogus.jpg",
     author:users[1],
     categories:["buildings","abstract","tilesets"],
-    createAt:new Date().getTime().toString()
+    createAt:new Date().getTime(),
+    likes:0
   },
   {
     id: crypto.randomUUID(),
@@ -41,16 +45,26 @@ const arts: ApiSchemas["ArtResponse"][] = [
     imageUrl:"/public/arts/amogus.jpg",
     author:users[0],
     categories:["characters","animals"],
-    createAt:new Date().getTime().toString()
+    createAt:new Date().getTime(),
+    likes:0
   },
 
 ];
 
 export const handlers = [
   http.get("/art", 
-    async() => {
+    async(ctx) => {
       await delay(100)
-      return HttpResponse.json(arts)
+      const category = ctx.query.get("category")
+      const page = +ctx.query.get("page")
+      let filtered:ApiSchemas["ArtResponse"][] = arts
+      if (category != "" && category != "all"){
+        filtered = arts.filter(e=>e.categories.includes(category))
+      }
+      filtered = filtered.slice(+page*10,+page*10+10)
+      console.log(filtered,category,page)
+
+      return HttpResponse.json(filtered)
     }
   ),
   http.get("/art/{name}", async(ctx) => {
@@ -75,7 +89,8 @@ export const handlers = [
         id:crypto.randomUUID(),
         author:users[0],
         categories:["buildings"],
-        createAt:new Date().getTime().toString()
+        createAt:new Date().getTime(),
+        likes:0
     }
     arts.push(newArt)
     return HttpResponse.json(newArt)

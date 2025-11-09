@@ -20,11 +20,14 @@ schemas:
       - name
       - avatar
       - createAt
+      - id
     properties:
+      id:
+        type: string
       name:
         type: string
       createAt:
-        type: string
+        type: number
         format: date
       avatar:
         type: string
@@ -44,7 +47,7 @@ schemas:
         items: 
           type: string
       createAt:
-        type: string
+        type: number
         format: date
       likes:
         type: number
@@ -60,6 +63,17 @@ schemas:
 
 getAllArts:
   summary: Get all arts
+  parameters:
+    - name: category
+      in: query
+      required: true
+      schema:
+        type: string
+    - name: page
+      required: true
+      in: query
+      schema:
+        type: number
   responses:
     '200':
       description: List of arts

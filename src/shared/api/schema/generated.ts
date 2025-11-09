@@ -14,7 +14,10 @@ export interface paths {
         /** Get all arts */
         get: {
             parameters: {
-                query?: never;
+                query: {
+                    category: string;
+                    page: number;
+                };
                 header?: never;
                 path?: never;
                 cookie?: never;
@@ -160,15 +163,17 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         User: {
+            id: string;
             name: string;
             /** Format: date */
-            createAt: string;
+            createAt: number;
             avatar: string;
         };
         ArtResponse: {
             categories: string[];
             /** Format: date */
-            createAt: string;
+            createAt: number;
+            likes: number;
             author: components["schemas"]["User"];
             id: string;
             name: string;
@@ -181,6 +186,7 @@ export interface components {
         CreateArt: {
             name: string;
             image: string;
+            categories: string[];
         };
     };
     responses: {

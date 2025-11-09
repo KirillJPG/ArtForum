@@ -15,6 +15,9 @@
 *{
     font-family: "Gilroy";
 }
+body{
+    overflow-y: scroll;
+}
 @theme {
     --color-primary:#3DCBB1;
     --color-secondary:#FFD130;
