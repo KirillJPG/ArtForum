@@ -7,5 +7,5 @@ export const fetchClient = createFetchClient<paths>({
     baseUrl:"http://localhost:5173"
 })
 
-export const queryClient = new QueryClient()
+export const queryClient = new QueryClient({defaultOptions:{queries:{refetchInterval:50000,refetchOnWindowFocus:false,retry:1}}})
 export const rqClient = createClient(fetchClient)

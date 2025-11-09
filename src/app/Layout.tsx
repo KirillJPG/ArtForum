@@ -1,3 +1,4 @@
+import { Footer } from "@/features/footer"
 import { Header } from "@/features/header/index"
 import { Suspense } from "react"
 import { Outlet } from "react-router"
@@ -7,12 +8,13 @@ import { Outlet } from "react-router"
 
 function Layout() {
   return (
-    <>
+    <div className="grid min-h-screen grid-rows-[1fr_min-content]">
      <Header/>
-     <Suspense fallback={<>loading</>}>
+     <Suspense  fallback={<div>loading</div>}>
       <Outlet/>
      </Suspense>
-    </>
+      <Footer/>
+    </div>
   )
 }
 

@@ -1,12 +1,12 @@
-import type { PathParams, ROUTES } from "@/shared/model/routes"
 import { Container } from "@/shared/ui/Container/Container"
-import { useParams } from "react-router"
+import { useHeaderVariant } from "../header"
 
 export default function Art(){
-    const {artId} = useParams<PathParams[typeof ROUTES["ART"]]>()
+    useHeaderVariant("black")
+    
     return(
         <Container>
-            <>Art</>
+            <div className="text-black">Art</div>
         </Container>
     )
 }

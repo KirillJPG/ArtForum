@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
-type Variant = "light"|"black"
+export type Variant = "light"|"black"
 
 interface State{
     variant:Variant
@@ -12,7 +12,7 @@ interface Action{
 
 
 export const useStoreHeader = create<State & Action>()(immer((set) => ({
-  variant:"light",
+  variant:"black",
   setVariant:(variant)=>set((state)=>{
     state.variant = variant
   })    

@@ -10,6 +10,6 @@ export function useDebounce<D>(value:D,ms:number=500){
         return ()=>{
             clearTimeout(timeout)
         }   
-    },[debounceState])
+    },[debounceState,ms])
     return {state,setDebounceState}
 }

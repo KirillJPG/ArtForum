@@ -8,7 +8,7 @@ export function List(){
     const {data,isLoading} = rqClient.useQuery("get","/art",{params:{query:{category,page}}})
     if (isLoading) return <Loading/>
     return (
-        <div className="grid grid-cols-4 gap-3 py-2"> 
+        <div className="grid grid-cols-4 gap-3 py-2 pb-10"> 
             {data?.map((e,id)=><Card {...e} key={id}/>)}
         </div>
     )

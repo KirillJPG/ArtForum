@@ -9,22 +9,24 @@ import { useDebounce } from "@/shared/lib/useDebounce";
 import { Link } from "react-router";
 import { generateTypedPath, ROUTES } from "@/shared/model/routes";
 import { useStoreHeader } from "./headerStore";
+import clsx from "clsx";
 
 export function SearchHeader(){
     const [focus,setFocus] = useState(false)
     const {variant} = useStoreHeader()
-    const {state:search,setDebounceState:setSearch} = useDebounce("",10)
+    const {state:search,setDebounceState:setSearch} = useDebounce("",500)
     const {isLoading,data} = rqClient.useQuery("get","/art/{name}",{params:{path:{name:search}}})
     const isLight = variant == "light"
     return (
         <>
-            {(focus) && <div className="fixed duration-500 starting:opacity-0 left-0 top-0 right-0 bottom-0 bg-black90 backdrop-blur-[2px]" onClick={()=>setFocus(false)}></div> }
             <Search onChange={e=>setSearch(e.target.value)} 
                     onFocus={()=>setFocus(true)}  
                     placeholder="Search of arts" 
                     variant={variant}  
-                    icon={isLoading ? <LoadingIcon /> : <SearchIcon className={isLight ? "fill-white" : "fill-black"}/>}/>
+                    className="relative z-50 duration-500"
+                    icon={isLoading ? <LoadingIcon /> : <SearchIcon className={clsx(isLight ? "fill-white" : "fill-black")}/>}/>
 
+            {(focus) && <div className="fixed bg-black90 backdrop-blur-[5px] duration-500 starting:opacity-0 left-0 top-0 right-0 bottom-0 z-20" onClick={()=>setFocus(false)}></div> }
             {(focus) && <div className="relative z-20">
                 <Modal><ListItems search={search} arts={data} isLoading={isLoading}/></Modal>
             </div>}

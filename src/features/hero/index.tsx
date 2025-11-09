@@ -1,5 +1,3 @@
-import { useEffect } from "react"
-import { useStore } from "../header"
 import styles from "./Hero.module.css"
 import { Container } from "@/shared/ui/Container/Container"
 import { Button } from "@/shared/ui/Button/Button"
@@ -8,10 +6,7 @@ import { Link } from "react-router"
 import { ROUTES } from "@/shared/model/routes"
 
 export function Hero(){
-    const {setVariant}= useStore()
-    useEffect(()=>{
-        setVariant("light")
-    })
+    
     return(
         <div className="overflow-hidden relative h-[700px]">
             <BackgroundHero/>
