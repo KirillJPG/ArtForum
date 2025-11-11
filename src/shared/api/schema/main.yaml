@@ -16,3 +16,7 @@ paths:
   /art/{name}:
     get:
         $ref: ./endpoints/Art.yaml#/getArtsByName
+  /user/{name}:
+    get:
+      $ref: ./endpoints/User.yaml#/getUserByName
+

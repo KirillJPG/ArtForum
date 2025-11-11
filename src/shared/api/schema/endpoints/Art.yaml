@@ -14,23 +14,6 @@ schemas:
         type: array 
         items: 
           type: string
-  User:
-    type: object
-    required:
-      - name
-      - avatar
-      - createAt
-      - id
-    properties:
-      id:
-        type: string
-      name:
-        type: string
-      createAt:
-        type: number
-        format: date
-      avatar:
-        type: string
   ArtResponse:
     type: object
     required:
@@ -52,7 +35,7 @@ schemas:
       likes:
         type: number
       author:
-        $ref: "#/schemas/User"
+        $ref: "./User.yaml#/schemas/User"
       id:
         type: string
       name:

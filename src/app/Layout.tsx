@@ -8,7 +8,7 @@ import { Outlet } from "react-router"
 
 function Layout() {
   return (
-    <div className="grid min-h-screen grid-rows-[1fr_min-content]">
+    <div className="grid min-h-screen grid-rows-[min-content_1fr_min-content]">
      <Header/>
      <Suspense  fallback={<div>loading</div>}>
       <Outlet/>

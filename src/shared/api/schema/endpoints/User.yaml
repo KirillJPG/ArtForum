@@ -1,0 +1,38 @@
+schemas:
+  User:
+    type: object
+    required:
+      - name
+      - avatar
+      - createAt
+      - id
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      createAt:
+        type: number
+        format: date
+      avatar:
+        type: string
+
+
+getUserByName:
+  summary: Get user
+  parameters:
+    - name: name
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: List of arts
+      content:
+        application/json:
+          schema:
+            $ref: '#/schemas/User'
+    '404':
+      $ref: '../shared/responses.yaml#/NotFoundError'
+

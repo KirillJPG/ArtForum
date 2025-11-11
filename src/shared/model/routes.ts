@@ -8,7 +8,7 @@ export const ROUTES = {
   ARTS: "/arts",
   ART: "/arts/:artId",
   ANY:"*",
-  USER:"/profile/:userId",
+  USER:"/profile/:userName",
   CREATE:"/art/create"
 
 } as const;
@@ -18,7 +18,7 @@ export interface PathParams {
     artId: string;
   };
   [ROUTES.USER]: {
-    userId: string;
+    userName: string;
   };
 };
 
