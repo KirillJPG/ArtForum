@@ -12,7 +12,7 @@ export const router = createBrowserRouter([
       { path: ROUTES.USER, Component:lazy(()=>import("@features/Profile/index") )},
       { path: ROUTES.ART, Component:lazy(()=>import("@features/ArtPage/index"))},
       { path: ROUTES.ANY, loader:()=>redirect(ROUTES.HOME)},
-
+      { path: ROUTES.CREATE, Component:lazy(()=>import("@features/CreateArt/index"))}
 
     ],
   },

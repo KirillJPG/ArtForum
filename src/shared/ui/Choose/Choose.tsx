@@ -10,7 +10,7 @@ interface IChoose extends OptionHTMLAttributes<HTMLOptionElement>{
     select:Select
 }
 
-const optionStyle = cva("bg-transparent border duration-500 rounded-md disabled:brightness-[0.25] select-none",{
+const optionStyle = cva("bg-transparent border duration-500 rounded-md disabled:brightness-[0.25] select-none cursor-pointer hover:bg-gray-200",{
     variants:{
         variant:{
             select:"border-primary text-primary",
