@@ -1,10 +1,15 @@
+import { Vector } from "./Vector"
+
 export class Pixel{
     color = "#FFFFFF"
-    x = 0
-    y = 0
-    constructor(color:string,x:number,y:number){
+    position:Vector = new Vector(0,0)
+    isHover = false
+    constructor(color:string,position:Vector){
         this.color = color
-        this.x = x
-        this.y = y
+        this.position = position
     }
+    setHover(isHover:boolean){
+        this.isHover = isHover
+    }
+
 }
