@@ -1,10 +1,11 @@
+import type { position } from "./Canvas"
 import { Vector } from "./Vector"
 
 export class Pixel{
     color = "#FFFFFF"
-    position:Vector = new Vector(0,0)
+    position!:position
     isHover = false
-    constructor(color:string,position:Vector){
+    constructor(color:string,position:position){
         this.color = color
         this.position = position
     }

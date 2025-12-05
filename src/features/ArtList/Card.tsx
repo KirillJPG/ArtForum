@@ -2,11 +2,13 @@ import type { ApiSchemas } from "@/shared/api";
 import { generateTypedPath, ROUTES } from "@/shared/model/routes";
 import { DateIcon, LikeIcon, PersonIcon } from "@/shared/ui/Icons/Icons";
 import { memo } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 export const Card = memo( function Card({author,createAt,imageUrl,likes,name,id}:ApiSchemas["ArtResponse"]){
+    const navigator = useNavigate()
+    const onClick = () => navigator(generateTypedPath(ROUTES["ART"],{artId:id}))
     return (
-            <Link to={generateTypedPath(ROUTES["ART"],{artId:id})} className="border border-black60 p-2 rounded-md grid-rows-[150px_1fr_1fr] grid gap-1 hover:-translate-y-3 duration-300">
+            <div onClick={onClick} className="border border-black60 p-2 rounded-md grid-rows-[150px_1fr_1fr] grid gap-1 hover:-translate-y-3 duration-300 cursor-pointer">
                 <div className="flex justify-center relative">
                     <span className="text-black text-sm flex items-center absolute right-0 bottom-0 p-1 bg-primary rounded-md"><DateIcon width={20} height={20}/>{new Date(createAt).toLocaleDateString()}</span>
                     <div className="flex gap-1 items-center font-bold text-black60 absolute right-0 top-0 p-1 bg-secondary rounded-md"><LikeIcon className="fill-black60" width={22} height={20}/> {likes}</div>
@@ -17,7 +19,7 @@ export const Card = memo( function Card({author,createAt,imageUrl,likes,name,id}
                 <div className="">
                     <Link to={generateTypedPath(ROUTES["USER"],{userName:author.name})} className="hover:brightness-50 duration-300 py-0.5 text-primary z-20 flex gap-1 items-center"><PersonIcon width={22} height={20}/> {author.name}</Link>
                 </div>
-            </Link>  
+            </div>  
     )
 },(prev,next)=>{
     if(prev.author.id == next.author.id && prev.categories.length == next.categories.length) return true
