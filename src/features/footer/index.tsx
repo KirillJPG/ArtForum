@@ -3,7 +3,7 @@ import { Logo } from "@/shared/ui/Logo/Logo";
 
 export function Footer(){
     return(
-        <div className="bg-dark py-10 items-center">
+        <div className="bg-dark py-10 items-center relative z-10">
             <Container>
                 <div className="grid gap-5 items-center">
                     <Logo light={true}/>

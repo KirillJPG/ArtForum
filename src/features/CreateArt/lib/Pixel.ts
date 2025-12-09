@@ -1,6 +1,4 @@
 import type { position } from "./Canvas"
-import { Vector } from "./Vector"
-
 export class Pixel{
     color = "#FFFFFF"
     position!:position

@@ -3,23 +3,30 @@ import { useStore } from "./CanvasStore"
 import type { Tool } from "./lib/Canvas"
 import { EraserIcon, FillIcon, PencilIcon } from "@/shared/ui/Icons/Icons"
 import clsx from "clsx"
-import "./PaintStyle.css"
+import style from "./PaintStyle.module.css"
 
 export function PaintCanvas(){
+    const movePaint = useStore(state=>state.onMovePaint)
+    const mouseUpPaint = useStore(state=>state.onMouseUpPaint)
     return (
-        <div className="grid grid-cols-[max-content_auto] gap-5 h-full">
+        <div className="grid gap-5 h-full relative" onMouseUp={mouseUpPaint} onMouseMove={movePaint}>
             <SidePaint/>
             <BodyPaint/>
+            <BackgourndPage/>
         </div>
     )
 }
 
 function BodyPaint(){
-    return <div className="h-full w-full relative grid justify-center items-center p-2">
+    return <div className="relative grid justify-center">
         <Canvas/>
     </div>
 }
-
+function BackgourndPage(){
+    return (
+        <div className={style.bg}></div>
+    )
+}
 function Canvas(){
     const setCanvas = useStore(state=>state.setCanvas)
     const mouseMove = useStore(state=>state.mouseMove)
@@ -40,12 +47,12 @@ function Canvas(){
         }
     },[refCanvas.current])
     return (
-        <canvas className="border w-full h-full relative overflow-y-scroll " onWheel={onScroll} onMouseLeave={mouseExit} onMouseDown={onMouseDown} onMouseUp={onMouseUp}  onMouseMove={mouseMove} ref={refCanvas}></canvas>
+        <canvas className={clsx(style.canvas,"relative overflow-y-scroll")} onWheel={onScroll} onMouseLeave={mouseExit} onMouseDown={onMouseDown} onMouseUp={onMouseUp}  onMouseMove={mouseMove} ref={refCanvas}></canvas>
     )
 }
 
 function SidePaint(){
-    return <div className="p-2 grid gap-2 auto-rows-max">
+    return <div className="p-2 grid gap-2 auto-rows-max absolute rounded-md bg-white shadow-md z-10 top-5 left-5 shadow-gray-500 ">
         <Pallete/>
         <Tools/>
     </div>

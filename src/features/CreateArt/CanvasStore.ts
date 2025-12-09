@@ -14,16 +14,18 @@ interface Action{
     setColor:(color:string)=>void
     setCanvas:(canvas:HTMLCanvasElement)=>void,
     mouseMove:(event:MouseEvent<HTMLCanvasElement>)=>void,
-    onMouseDown:()=>void,
-    onMouseUp:()=>void,
+    onMouseDown:(event:MouseEvent<HTMLCanvasElement>)=>void,
+    onMouseUp:(event:MouseEvent<HTMLCanvasElement>)=>void,
     setTool:(tool:Tool)=>void,
-    mouseExit:(event:MouseEvent<HTMLCanvasElement>)=>void
-    onScroll:(event:WheelEvent<HTMLCanvasElement>)=>void
+    mouseExit:(event:MouseEvent<HTMLCanvasElement>)=>void,
+    onScroll:(event:WheelEvent<HTMLCanvasElement>)=>void,
+    onMovePaint:(event:MouseEvent<HTMLDivElement>)=>void,
+    onMouseUpPaint:(event:MouseEvent<HTMLDivElement>)=>void,
 }
 
 
 export const useStore = create<State & Action>()(immer((set)=>({
-        canvas:new Canvas(50,50),
+        canvas:new Canvas(100,100),
         color:"#111111",
         tool:"pencil",
         pallete:["#123123","#234345","#AF2817","#FFFAAA"],
@@ -43,11 +45,11 @@ export const useStore = create<State & Action>()(immer((set)=>({
         onScroll:(event)=>set((state)=>{
             state.canvas.onScroll(event)
         }),
-        onMouseDown:()=>set(state=>{
-            state.canvas.setMouseHold(true)
+        onMouseDown:(event)=>set(state=>{
+            state.canvas.onMouseDown(event)
         }),        
-        onMouseUp:()=>set(state=>{
-            state.canvas.setMouseHold(false)
+        onMouseUp:(event)=>set(state=>{
+            state.canvas.onMouseUp(event)
         }),    
         addColorPallete:(color)=>set(state=>{
             state.pallete.push(color)
@@ -55,5 +57,11 @@ export const useStore = create<State & Action>()(immer((set)=>({
         setTool:(tool)=>set(state=>{
             state.canvas.setTool(tool)
             state.tool = tool
-        })      
+        }),
+        onMovePaint:(event)=>set(state=>{
+            state.canvas.moveCanvas(event.movementX,event.movementY)
+        }),
+        onMouseUpPaint:(event)=>set(state=>{
+            if (event.button == 1) state.canvas.setCanvasMove(false)
+        }),
 })))

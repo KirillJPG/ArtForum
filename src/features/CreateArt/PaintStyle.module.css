@@ -1,0 +1,25 @@
+body{
+    overflow: hidden;
+}
+.canvas{
+    image-rendering: pixelated;
+    background: white;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.bg{
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    --color1:#BBBBBB;
+    --color2:#888888;
+    background-color: var(--color1);
+    background-image: linear-gradient( 45deg, var(--color2) 25%, transparent 25%, transparent 74%, var(--color2) 75%, var(--color2)), linear-gradient( 45deg, var(--color2) 25%, transparent 25%, transparent 74%, var(--color2) 75%, var(--color2));
+    background-size: 100px 100px;
+    background-position: 0 0, 50px 50px;
+}

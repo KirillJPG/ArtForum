@@ -14,8 +14,9 @@ export class Canvas{
     pixels:Pixel[][] = []
     canvas!:HTMLCanvasElement;
     ctx!:CanvasRenderingContext2D;
-    mouseHold:boolean = false
-    pixelSize = 20
+    isMouseHold:boolean = false
+    isCanvasMoving:boolean = false
+    pixelSize = 1
     selectColor:string = "#444444"
     tool:Tool = "pencil"
     newMousePosition:position = {x:0,y:0}
@@ -32,16 +33,32 @@ export class Canvas{
         const {clientX,clientY} = event
         this.newMousePosition = {x:0,y:0}
         this.oldMousePosition = {x:0,y:0}
-        this.mouseHold = false
-
+        this.isMouseHold = false
+        document.body.style.cursor = "default"
         this.setHoverPixel(this.getPixelByPos(clientX,clientY))
         this.onChange()
     }
-    setMouseHold(hold:boolean){
-        this.mouseHold = hold
+    onMouseDown(event:MouseEvent<HTMLCanvasElement>){
+        if (event.button == 0) this.setMouseHold(true)         
+        if (event.button == 1) this.setCanvasMove(true)         
+    }
+    onMouseUp(event:MouseEvent<HTMLCanvasElement>){
+        if (event.button == 0) this.setMouseHold(false) 
+        if (event.button == 1) this.setCanvasMove(false)         
+    }
+    setCanvasMove(move:boolean){
+        this.isMouseHold = false
+        this.isCanvasMoving = move
+        document.body.style.cursor = move ? "move" : "default"
         this.onChange()
     }
-        onChange(){
+    setMouseHold(hold:boolean){
+        this.isMouseHold = hold
+        this.isCanvasMoving = false
+        this.onChange()
+    }
+
+    onChange(){
         switch(this.tool){
             case "pencil":
                 this.draw()
@@ -71,7 +88,7 @@ export class Canvas{
     fill(){
         for (const row of this.pixels){
             for (const pixel of row){
-                if (this.mouseHold && pixel.isHover){
+                if (this.isMouseHold && pixel.isHover){
                     const color = pixel.color
                     pixel.color = this.selectColor
                     const neighbors = this.getNeighborsPixel(pixel).filter(e=>e.color == color)
@@ -92,7 +109,7 @@ export class Canvas{
     eraser(){
         const hoverPixel =  this.getPixelByPos(this.newMousePosition.x,this.newMousePosition.y)!.position
         const oldPixel = this.getPixelByPos(this.oldMousePosition.x,this.oldMousePosition.y)!.position
-        if (!this.mouseHold || !hoverPixel || !oldPixel) return
+        if (!this.isMouseHold || !hoverPixel || !oldPixel) return
         const linePixels = this.getLinePixels(hoverPixel,oldPixel)
         for (const pixel of linePixels){
             pixel.color = "transparent"
@@ -106,24 +123,13 @@ export class Canvas{
         const isDown = deltaY > 0 ? true : false
         if (isDown){
             this.pixelSize*=0.9
-            this.pixelSize = +this.pixelSize.toFixed(0)
+            this.pixelSize =Math.max(1, Math.floor(this.pixelSize))
         }else{
-            this.pixelSize*=1.1
-            this.pixelSize = +this.pixelSize.toFixed(0)
+            this.pixelSize*=2
+            this.pixelSize = Math.floor(this.pixelSize)
         }
-        
-        this.updateHover()
+        this.resizeCanvas()
         this.render()
-    }
-    getAABB(pos1:position,pos2:position){
-        const {x:xPos,y:yPos} = pos1
-        const {x:x2Pos,y:y2Pos} = pos2
-        const [xFrom,xTo] = [Math.min(xPos,x2Pos),Math.max(xPos,x2Pos)]
-        const [yFrom,yTo] = [Math.min(yPos,y2Pos),Math.max(yPos,y2Pos)]
-        return {xFrom,xTo,yFrom,yTo}
-    }
-    checkIsValid(min:number,value:number,max:number){
-        return Math.min(Math.max(min,value),max) == value
     }
     getLinePixels(pos1:position,pos2:position){
         let vector = new Vector(pos1.x-pos2.x,pos1.y-pos2.y)
@@ -137,9 +143,9 @@ export class Canvas{
         return linePixels
     }
     draw(){
-        const hoverPixel =  this.getPixelByPos(this.newMousePosition.x,this.newMousePosition.y)!.position
-        const oldPixel = this.getPixelByPos(this.oldMousePosition.x,this.oldMousePosition.y)!.position
-        if (!this.mouseHold || !hoverPixel || !oldPixel) return
+        const hoverPixel =  this.getPixelByPos(this.newMousePosition.x,this.newMousePosition.y)?.position
+        const oldPixel = this.getPixelByPos(this.oldMousePosition.x,this.oldMousePosition.y)?.position
+        if (!this.isMouseHold || !hoverPixel || !oldPixel) return
         const linePixels = this.getLinePixels(hoverPixel,oldPixel)
         for (const pixel of linePixels){
             pixel.color = this.selectColor
@@ -158,10 +164,9 @@ export class Canvas{
     }
     setCanvas(canvas:HTMLCanvasElement){
         this.canvas = canvas
-        this.ctx = canvas.getContext("2d")!
         this.resizeCanvas()
+        this.ctx = canvas.getContext("2d")!
         this.drawPixels()
-        this.drawBackground()
     }
     getPixelByPos(mouseX:number,mouseY:number):Pixel | null{
         const [x,y] = [mouseX,mouseY]
@@ -176,6 +181,7 @@ export class Canvas{
     updateHover(){
         this.setHoverPixel(this.getPixelByPos(this.newMousePosition.x,this.newMousePosition.y))
     }
+
     onMouseMove(e:MouseEvent<HTMLCanvasElement>){
         const {left,top} = this.canvas.getBoundingClientRect()
         const {clientX,clientY} = e
@@ -183,6 +189,11 @@ export class Canvas{
         this.newMousePosition = {x:clientX-left,y:clientY-top}
         this.updateHover()
         this.onChange()
+    }
+    moveCanvas(moveX:number,moveY:number){
+        if(!this.isCanvasMoving) return
+        this.canvas.style.left = this.canvas.offsetLeft+moveX+"px"
+        this.canvas.style.top = this.canvas.offsetTop+moveY+"px"
     }
     setHoverPixel(hoveredPixel?:Pixel | null){
         for (const row of this.pixels){
@@ -198,23 +209,11 @@ export class Canvas{
     }
     
     resizeCanvas(){
-        const {width,height} = this.canvas.getBoundingClientRect()
-        this.canvas.width = width
-        this.canvas.height = height
-    }
-    drawBackground(){
-         this.pixels.forEach((row)=>{
-            row.forEach((pixel)=>{
-                const positionNum = pixel.position.x + pixel.position.y
-                if (positionNum % 2 == 1) this.ctx.fillStyle = "#22222240"
-                else this.ctx.fillStyle = "white"
-                this.ctx.fillRect(pixel.position.x*this.pixelSize,pixel.position.y*this.pixelSize,this.pixelSize,this.pixelSize)
-            })
-        })
+        this.canvas.width =  this.width*this.pixelSize
+        this.canvas.height = this.height*this.pixelSize
     }
     render(){
         this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height)
-        this.drawBackground()
         this.drawPixels()
     }
     drawPixels(){
@@ -229,4 +228,4 @@ export class Canvas{
         })
     }
     
-}
+} 
