@@ -1,7 +1,7 @@
 import { immer } from "zustand/middleware/immer";
 import { Canvas, type Tool } from "./lib/Canvas";
 import { create } from "zustand";
-import type { MouseEvent,  WheelEvent } from "react";
+import type { KeyboardEvent, MouseEvent,  WheelEvent } from "react";
 
 interface State{
     pallete:string[]
@@ -21,6 +21,7 @@ interface Action{
     onScroll:(event:WheelEvent<HTMLCanvasElement>)=>void,
     onMovePaint:(event:MouseEvent<HTMLDivElement>)=>void,
     onMouseUpPaint:(event:MouseEvent<HTMLDivElement>)=>void,
+    onKeyDown:(event:KeyboardEvent<HTMLCanvasElement>)=>void,
 }
 
 
@@ -63,5 +64,15 @@ export const useStore = create<State & Action>()(immer((set)=>({
         }),
         onMouseUpPaint:(event)=>set(state=>{
             if (event.button == 1) state.canvas.setCanvasMove(false)
+        }),
+        onKeyDown:(event)=>set(state=>{
+            const key = event.key.toLowerCase()
+            event.preventDefault()
+            if (event.ctrlKey && key == "d") {
+                state.canvas.clearSelect()
+            }
+            if (key == "delete"){
+                state.canvas.deleteSelects()
+            }
         }),
 })))

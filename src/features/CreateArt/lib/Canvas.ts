@@ -2,7 +2,7 @@ import type { MouseEvent,  WheelEvent } from "react";
 import { Pixel } from "./Pixel"
 import { Vector } from "./Vector";
 
-export type Tool = "eraser" | "fill" | "pencil"
+export type Tool = "eraser" | "fill" | "pencil" | "selection"
 
 export interface position{
     x:number,
@@ -21,6 +21,8 @@ export class Canvas{
     tool:Tool = "pencil"
     newMousePosition:position = {x:0,y:0}
     oldMousePosition:position = {x:0,y:0}
+    selectionPixels:Set<Pixel> = new Set([])
+
     constructor(width:number,height:number){
         this.width = width
         this.height  = height
@@ -34,9 +36,9 @@ export class Canvas{
         this.newMousePosition = {x:0,y:0}
         this.oldMousePosition = {x:0,y:0}
         this.isMouseHold = false
-        document.body.style.cursor = "default"
         this.setHoverPixel(this.getPixelByPos(clientX,clientY))
         this.onChange()
+        document.body.style.cursor = "default"
     }
     onMouseDown(event:MouseEvent<HTMLCanvasElement>){
         if (event.button == 0) this.setMouseHold(true)         
@@ -45,6 +47,9 @@ export class Canvas{
     onMouseUp(event:MouseEvent<HTMLCanvasElement>){
         if (event.button == 0) this.setMouseHold(false) 
         if (event.button == 1) this.setCanvasMove(false)         
+    }
+    clearSelect(){
+        this.selectionPixels = new Set([])
     }
     setCanvasMove(move:boolean){
         this.isMouseHold = false
@@ -69,6 +74,26 @@ export class Canvas{
             case "fill":
                 this.fill()
                 break
+            case "selection":
+                this.selection()        
+                break
+        }
+    }
+    selection(){
+        document.body.style.cursor = "cell"
+        const hoverPixel =  this.getPixelByPos(this.newMousePosition.x,this.newMousePosition.y)!.position
+        const oldPixel = this.getPixelByPos(this.oldMousePosition.x,this.oldMousePosition.y)!.position
+        if (!this.isMouseHold || !hoverPixel || !oldPixel) return
+        const linePixels = this.getLinePixels(hoverPixel,oldPixel)
+        for (const pixel of linePixels){
+            this.selectionPixels.add(pixel)
+        }
+    }
+    deleteSelects(){
+        console.log("delete",this.selectionPixels)
+        const pixels = this.selectionPixels.values()
+        for (const pixel of pixels){
+            pixel.color = "transparent"
         }
     }
     getNeighborsPixel(pixel?:Pixel){
@@ -217,13 +242,18 @@ export class Canvas{
         this.drawPixels()
     }
     drawPixels(){
+
         this.pixels.forEach((row)=>{
             row.forEach((pixel)=>{
                 this.ctx.fillStyle = pixel.color
                 if (pixel.isHover) this.ctx.fillStyle = this.selectColor
                 if (this.tool == "eraser" && pixel.isHover) this.ctx.fillStyle = "transparent"
                 if (this.tool == "fill" && pixel.isHover) this.ctx.fillStyle = this.selectColor
+                if (this.selectionPixels.has(pixel))  this.ctx.strokeStyle = "red"
                 this.ctx.fillRect(pixel.position.x*this.pixelSize,pixel.position.y*this.pixelSize,this.pixelSize,this.pixelSize)
+                this.ctx.strokeRect(pixel.position.x*this.pixelSize,pixel.position.y*this.pixelSize,this.pixelSize-1,this.pixelSize-1)
+                this.ctx.stroke()
+                this.ctx.strokeStyle = "transparent"
             })
         })
     }

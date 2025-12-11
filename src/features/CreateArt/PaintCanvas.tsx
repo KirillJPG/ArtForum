@@ -1,15 +1,16 @@
 import { memo, useEffect, useRef, type ReactNode} from "react"
 import { useStore } from "./CanvasStore"
 import type { Tool } from "./lib/Canvas"
-import { EraserIcon, FillIcon, PencilIcon } from "@/shared/ui/Icons/Icons"
+import { EraserIcon, FillIcon, PencilIcon, SelectionIcon } from "@/shared/ui/Icons/Icons"
 import clsx from "clsx"
 import style from "./PaintStyle.module.css"
+import { MovingWindow } from "@/shared/ui/MovingWindow/MovingWindow"
 
 export function PaintCanvas(){
     const movePaint = useStore(state=>state.onMovePaint)
     const mouseUpPaint = useStore(state=>state.onMouseUpPaint)
     return (
-        <div className="grid gap-5 h-full relative" onMouseUp={mouseUpPaint} onMouseMove={movePaint}>
+        <div className="grid gap-5 h-full relative" onMouseUp={mouseUpPaint} onMouseMove={movePaint} onContextMenu={e=>e.preventDefault()}>
             <SidePaint/>
             <BodyPaint/>
             <BackgourndPage/>
@@ -34,6 +35,7 @@ function Canvas(){
     const onMouseDown = useStore(state=>state.onMouseDown)
     const onMouseUp = useStore(state=>state.onMouseUp)
     const onScroll = useStore(state=>state.onScroll)
+    const onKeyDown = useStore(state=>state.onKeyDown)
     const refCanvas = useRef<HTMLCanvasElement>(null)
 
     useEffect(()=>{
@@ -47,15 +49,19 @@ function Canvas(){
         }
     },[refCanvas.current])
     return (
-        <canvas className={clsx(style.canvas,"relative overflow-y-scroll")} onWheel={onScroll} onMouseLeave={mouseExit} onMouseDown={onMouseDown} onMouseUp={onMouseUp}  onMouseMove={mouseMove} ref={refCanvas}></canvas>
+        <canvas tabIndex={1} className={clsx(style.canvas,"relative overflow-y-scroll")} onKeyDown={onKeyDown} onWheel={onScroll} onMouseLeave={mouseExit} onMouseDown={onMouseDown} onMouseUp={onMouseUp}  onMouseMove={mouseMove} ref={refCanvas}></canvas>
     )
 }
 
 function SidePaint(){
-    return <div className="p-2 grid gap-2 auto-rows-max absolute rounded-md bg-white shadow-md z-10 top-5 left-5 shadow-gray-500 ">
-        <Pallete/>
-        <Tools/>
-    </div>
+    return (
+        <MovingWindow className="w-fit h-fit">
+            <div className="p-2 grid gap-2 auto-rows-max rounded-md bg-white shadow-md z-10 shadow-gray-500 ">
+                <Pallete/>
+                <Tools/>
+            </div>
+        </MovingWindow>
+    )
 }
 
 
@@ -90,6 +96,7 @@ function Tools(){
                 <ChooseTool name="pencil" icon={<PencilIcon width={16} height={16}/>}/>
                 <ChooseTool name="fill"   icon={<FillIcon   width={16} height={16}/>}/>
                 <ChooseTool name="eraser" icon={<EraserIcon width={16} height={16}/>}/>
+                <ChooseTool name="selection" icon={<SelectionIcon width={16} height={16}/>}/>
             </div>
         </div>
     )
