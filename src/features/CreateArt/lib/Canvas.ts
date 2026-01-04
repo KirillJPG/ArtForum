@@ -1,6 +1,7 @@
 import type { MouseEvent,  WheelEvent } from "react";
 import { Pixel } from "./Pixel"
 import { Vector } from "./Vector";
+import { preconnect } from "react-dom";
 
 export type Tool = "eraser" | "fill" | "pencil" | "selection"
 
@@ -100,17 +101,13 @@ export class Canvas{
         if (!pixel) return []
         const {x,y} = pixel.position
         const neighbors:Pixel[] = []
-        for (const row of this.pixels){
-            for (const pixel2 of row){
-                const {x:x2,y:y2} = pixel2.position
-                if ((Math.abs(x2-x)+Math.abs(y-y2)) <= 1 && pixel != pixel2){
-                    neighbors.push(pixel2)
-                }
-            }
-        }
-        return neighbors
+        neighbors.push(this.pixels.at(y)?.at(x-1) ?? pixel)
+        neighbors.push(this.pixels.at(y)?.at(x+1) ?? pixel)
+        neighbors.push(this.pixels.at(y-1)?.at(x) ?? pixel)
+        neighbors.push(this.pixels.at(y+1)?.at(x) ?? pixel)
+        return neighbors.filter(e=>e!=pixel)
     }
-    fill(){
+    async fill(){
         for (const row of this.pixels){
             for (const pixel of row){
                 if (this.isMouseHold && pixel.isHover){
@@ -118,14 +115,17 @@ export class Canvas{
                     pixel.color = this.selectColor
                     const neighbors = this.getNeighborsPixel(pixel).filter(e=>e.color == color)
                     const processed:Pixel[] = []
+                    let iter = 0;
                     while (neighbors.length != 0){
                         const first = neighbors[0]
+                        iter++
                         const neighbors_first = this.getNeighborsPixel(first).filter(e=>e.color == color && !processed.includes(first) && !neighbors.includes(e))
                         neighbors.push(...neighbors_first)
                         first.color = this.selectColor
                         processed.push(first)
                         neighbors.shift()
                     }
+                    console.log(iter)
                     return 
                 }
             }
